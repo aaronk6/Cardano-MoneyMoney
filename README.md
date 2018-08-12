@@ -7,7 +7,7 @@ Fetches balances from Cardano Blockchain Explorer and returns them as securities
 You can get a signed version of this extension from
 
 * my [GitHub releases](https://github.com/aaronk6/Cardano-MoneyMoney/releases/latest) page, or
-* the [MoneyMoney Extensions](https://moneymoney-app.com/extensions/) page _(coming soon)_
+* the [MoneyMoney Extensions](https://moneymoney-app.com/extensions/) page
 
 Once downloaded, move `Cardano.lua` to your MoneyMoney Extensions folder.
 
