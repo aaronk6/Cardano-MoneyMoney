@@ -32,9 +32,10 @@ WebBanking{
 
 local currencyName = "Cardano"
 local currency = "EUR" -- fixme: Don't hardcode
-local currencyField = "price_eur"
-local marketName = "CoinMarketCap"
-local priceUrl = "https://api.coinmarketcap.com/v1/ticker/cardano/?convert=EUR"
+local currencyField = "eur"
+local currencyId = "cardano"
+local marketName = "CoinGecko"
+local priceUrl = "https://api.coingecko.com/api/v3/simple/price?ids=" .. currencyId .. "&vs_currencies=" .. currencyField
 local balanceUrl = "https://cardanoexplorer.com/api/addresses/summary/"
 
 local addresses
@@ -84,7 +85,7 @@ end
 function queryPrices()
   local connection = Connection()
   local res = JSON(connection:request("GET", priceUrl))
-  return res:dictionary()[1]
+  return res:dictionary()[currencyId]
 end
 
 function queryBalances(addresses)
