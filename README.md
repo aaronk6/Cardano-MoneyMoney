@@ -21,3 +21,7 @@ Once downloaded, move `Cardano.lua` to your MoneyMoney Extensions folder.
 
 * Always assumes EUR as base currency
 
+## Credits
+
+Powered by [CoinGecko API](https://www.coingecko.com/en/api) and [Cardano Blockchain Explorer](https://cardanoexplorer.com/)
+
