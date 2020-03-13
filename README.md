@@ -1,6 +1,8 @@
 # Cardano-MoneyMoney
 
-Fetches balances from Cardano Blockchain Explorer and returns them as securities
+Fetches balances from Cardano Blockchain Explorer and returns them as securities.
+
+Requires MoneyMoney version **2.3.25** or greater.
 
 ## Extension Setup
 
