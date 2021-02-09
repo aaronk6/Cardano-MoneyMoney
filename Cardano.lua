@@ -37,6 +37,7 @@ local currencyId = "cardano"
 local marketName = "CoinGecko"
 local priceUrl = "https://api.coingecko.com/api/v3/simple/price?ids=" .. currencyId .. "&vs_currencies=" .. currencyField
 local balanceUrl = "https://cardanoexplorer.com/api/addresses/summary/"
+local apiWaitSec = 0.25
 
 local addresses
 local balances
@@ -93,9 +94,13 @@ function queryBalances(addresses)
   local balances = {}
   local res
 
-  for key, address in pairs(addresses) do
+  for i, address in ipairs(addresses) do
     res = JSON(connection:request("GET", balanceUrl .. address))
     table.insert(balances, res:dictionary()["Right"]["caBalance"]["getCoin"])
+    if i > 0 then
+      print("Sleeping " .. apiWaitSec .. " second(s) to circumvent API rate limit")
+      MM.sleep(apiWaitSec)
+    end
   end
 
   return balances
