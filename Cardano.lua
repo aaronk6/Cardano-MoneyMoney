@@ -4,7 +4,7 @@
 -- Username: DdzFFzCqrhf..., DdzFFzCqrhs...
 -- Password: (empty)
 --
--- Copyright (c) 2020 aaronk6
+-- Copyright (c) 2021 aaronk6
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,7 @@
 -- SOFTWARE.
 
 WebBanking{
-  version = 1.01,
+  version = 1.02,
   description = "Fetches balances from Cardano Blockchain Explorer and returns them as securities",
   services = { "Cardano" },
 }
