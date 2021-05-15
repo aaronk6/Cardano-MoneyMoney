@@ -25,7 +25,7 @@
 -- SOFTWARE.
 
 WebBanking{
-  version = 1.02,
+  version = 1.03,
   description = "Fetches balances from Cardano Blockchain Explorer and returns them as securities",
   services = { "Cardano" },
 }
@@ -36,8 +36,7 @@ local currencyField = "eur"
 local currencyId = "cardano"
 local marketName = "CoinGecko"
 local priceUrl = "https://api.coingecko.com/api/v3/simple/price?ids=" .. currencyId .. "&vs_currencies=" .. currencyField
-local balanceUrl = "https://cardanoexplorer.com/api/addresses/summary/"
-local apiWaitSec = 0.25
+local balanceUrl = "https://explorer.cardano.org/graphql"
 
 local addresses
 local balances
@@ -92,15 +91,49 @@ end
 function queryBalances(addresses)
   local connection = Connection()
   local balances = {}
-  local res
 
   for i, address in ipairs(addresses) do
-    res = JSON(connection:request("GET", balanceUrl .. address))
-    table.insert(balances, res:dictionary()["Right"]["caBalance"]["getCoin"])
-    if i > 0 then
-      print("Sleeping " .. apiWaitSec .. " second(s) to circumvent API rate limit")
-      MM.sleep(apiWaitSec)
+    local query = [[query searchForPaymentAddress($address: String!) {
+  transactions_aggregate(where: {_or: [{inputs: {address: {_eq: $address}}}, {outputs: {address: {_eq: $address}}}]}) {
+    aggregate {
+      count
+    }
+  }
+  paymentAddresses(addresses: [$address]) {
+    summary {
+      assetBalances {
+        asset {
+          assetName
+          description
+          fingerprint
+          name
+          policyId
+          ticker
+        }
+        quantity
+      }
+    }
+  }
+}
+]]
+
+    local body = JSON():set({
+      query = query,
+      variables = { address = address }
+    }):json()
+
+    local res = JSON(connection:request("POST", balanceUrl, body, 'application/json'))
+    local assetBalances = res:dictionary()['data']['paymentAddresses'][1]['summary']['assetBalances']
+    local quantity = 0
+
+    for i, b in ipairs(assetBalances) do
+      if b['asset']['assetName'] == 'ada' then
+        quantity = b['quantity']
+        break
+      end
     end
+
+    table.insert(balances, quantity)
   end
 
   return balances
