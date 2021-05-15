@@ -25,5 +25,5 @@ Once downloaded, move `Cardano.lua` to your MoneyMoney Extensions folder.
 
 ## Credits
 
-Powered by [CoinGecko API](https://www.coingecko.com/en/api) and [Cardano Blockchain Explorer](https://cardanoexplorer.com/)
+Powered by [CoinGecko API](https://www.coingecko.com/en/api) and [Cardano Blockchain Explorer](https://explorer.cardano.org/)
 
