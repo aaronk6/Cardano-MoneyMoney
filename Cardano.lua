@@ -25,7 +25,7 @@
 -- SOFTWARE.
 
 WebBanking{
-  version = 1.03,
+  version = 1.04,
   description = "Fetches balances from Cardano Blockchain Explorer and returns them as securities",
   services = { "Cardano" },
 }
