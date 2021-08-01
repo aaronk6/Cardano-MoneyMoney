@@ -122,6 +122,8 @@ function queryBalances(addresses)
       variables = { address = address }
     }):json()
 
+    print("Sending payload: " .. body)
+
     local res = JSON(connection:request("POST", balanceUrl, body, 'application/json'))
     local assetBalances = res:dictionary()['data']['paymentAddresses'][1]['summary']['assetBalances']
     local quantity = 0
