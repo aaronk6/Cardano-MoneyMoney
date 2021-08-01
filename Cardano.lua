@@ -104,6 +104,7 @@ function queryBalances(addresses)
       assetBalances {
         asset {
           assetName
+          decimals
           description
           fingerprint
           name
