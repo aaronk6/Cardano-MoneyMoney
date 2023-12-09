@@ -1,6 +1,6 @@
 # Cardano-MoneyMoney
 
-Fetches balances from Cardano Blockchain Explorer and returns them as securities.
+Fetches balances from [Cardanoscan](https://cardanoscan.io) and returns them as securities.
 
 Requires MoneyMoney version **2.3.25** or greater.
 
@@ -16,8 +16,8 @@ Once downloaded, move `Cardano.lua` to your MoneyMoney Extensions folder.
 ## Account Setup in MoneyMoney
 
 * Add a new account of type “Cardano”
-* Enter one or more Cardano addresses in the username field (comma-separated)
-* Enter anything in the password field (just don’t leave it blank)
+* Enter one or more Cardano addresses (comma-separated)
+* Enter your personal Cardanoscan API key (you can get a free API key here: https://cardanoscan.io/api)
 
 ## Known Issues and Limitations
 
@@ -25,5 +25,5 @@ Once downloaded, move `Cardano.lua` to your MoneyMoney Extensions folder.
 
 ## Credits
 
-Powered by [CoinGecko API](https://www.coingecko.com/en/api) and [Cardano Blockchain Explorer](https://explorer.cardano.org/)
+Powered by [CoinGecko API](https://www.coingecko.com/en/api) and [Cardanoscan](https://cardanoscan.io).
 

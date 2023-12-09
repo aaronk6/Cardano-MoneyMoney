@@ -1,8 +1,10 @@
 -- Inofficial Cardano Extension for MoneyMoney
--- Fetches balances from Cardano Blockchain Explorer and returns them as securities
+-- Fetches balances from Cardanoscan and returns them as securities
 --
--- Username: DdzFFzCqrhf..., DdzFFzCqrhs...
--- Password: (empty)
+-- Requires a free API key from https://cardanoscan.io/api
+--
+-- Cardano addresses: addr1q98xgh..., addr1w9qzpe...
+-- API key: Your API Key
 --
 -- Copyright (c) 2023 aaronk6
 --
@@ -26,7 +28,7 @@
 
 WebBanking{
   version = 1.04,
-  description = "Fetches balances from Cardano Blockchain Explorer and returns them as securities",
+  description = "Fetches balances from Cardanoscan and returns them as securities",
   services = { "Cardano" },
 }
 
@@ -36,9 +38,10 @@ local currencyField = "eur"
 local currencyId = "cardano"
 local marketName = "CoinGecko"
 local priceUrl = "https://api.coingecko.com/api/v3/simple/price?ids=" .. currencyId .. "&vs_currencies=" .. currencyField
-local balanceUrl = "https://explorer.cardano.org/graphql"
+local balanceUrl = "https://api.cardanoscan.io/api/v1/address/balance?address="
 
 local addresses
+local apiKey
 local balances
 
 function SupportsBank (protocol, bankCode)
@@ -47,6 +50,11 @@ end
 
 function InitializeSession (protocol, bankCode, username, username2, password, username3)
   addresses = strsplit(",%s*", username)
+  apiKey = trim(password)
+
+  if apiKey == "" then
+    error("API key is empty. You can get a free API key from https://cardanoscan.io/api")
+  end
 end
 
 function ListAccounts (knownAccounts)
@@ -93,50 +101,13 @@ function queryBalances(addresses)
   local balances = {}
 
   for i, address in ipairs(addresses) do
-    local query = [[query searchForPaymentAddress($address: String!) {
-  transactions_aggregate(where: {_or: [{inputs: {address: {_eq: $address}}}, {outputs: {address: {_eq: $address}}}]}) {
-    aggregate {
-      count
-    }
-  }
-  paymentAddresses(addresses: [$address]) {
-    summary {
-      assetBalances {
-        asset {
-          assetName
-          decimals
-          description
-          fingerprint
-          name
-          policyId
-          ticker
-        }
-        quantity
-      }
-    }
-  }
-}
-]]
+    local fullUrl = balanceUrl .. address
+    local headers = { apiKey = apiKey}
 
-    local body = JSON():set({
-      query = query,
-      variables = { address = address }
-    }):json()
+    local res = JSON(connection:request("GET", fullUrl, nil, nil, headers))
+    local balance = tonumber(res:dictionary()["balance"])
 
-    print("Sending payload: " .. body)
-
-    local res = JSON(connection:request("POST", balanceUrl, body, 'application/json'))
-    local assetBalances = res:dictionary()['data']['paymentAddresses'][1]['summary']['assetBalances']
-    local quantity = 0
-
-    for i, b in ipairs(assetBalances) do
-      if b['asset']['assetName'] == 'ada' then
-        quantity = b['quantity']
-        break
-      end
-    end
-
-    table.insert(balances, quantity)
+    table.insert(balances, balance)
   end
 
   return balances
@@ -160,4 +131,8 @@ function strsplit(delimiter, text)
     end
   end
   return list
+end
+
+function trim(s)
+  return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
