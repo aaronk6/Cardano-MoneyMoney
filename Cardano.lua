@@ -27,7 +27,7 @@
 -- SOFTWARE.
 
 WebBanking{
-  version = 1.04,
+  version = 1.05,
   description = "Fetches balances from Cardanoscan and returns them as securities",
   services = { "Cardano" },
 }
